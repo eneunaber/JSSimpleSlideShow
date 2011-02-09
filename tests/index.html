@@ -1,0 +1,173 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+	<title>Slideshow Test Suite</title>
+
+    <link href="../dependencies/qunit.css" rel="stylesheet" type="text/css" />
+    <script src="../dependencies/jquery.js" type="text/javascript"></script>
+    <script src="../dependencies/qunit.js" type="text/javascript"></script>
+    <script src="../simpleslideshow/slideshow.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        QUnit.reset = function () {
+            ResetSimpleSlideShow();
+        };
+
+        test("Can create slideshow object", function () {
+            ok(SimpleSlideShow != undefined, "Could create a slideshow object");
+        });
+
+
+        test("automatically finds ul with id of slideshow", function () {
+            var slideShow = SimpleSlideShow;
+
+            ok(slideShow.isReady(), "Found the ul with id of slidshow");
+        });
+
+
+        test("finds all the li's under the ul", function () {
+            var slideShow = SimpleSlideShow;
+
+            equals(slideShow.imageCount(), 3, "Found three li's (images) for our slideshow");
+        });
+
+
+        test("when isReady equals false image count = 0", function () {
+            var slideShow = SimpleSlideShow;
+            slideShow.isReady = function () { return false; };
+
+            equals(slideShow.imageCount(), 0, "No li's are found because isReady is false");
+        });
+
+
+        test("when isReady equals false begin does nothing", function () {
+            restListItems();
+            var slideShow = SimpleSlideShow;
+            var lis = $("ul.slideShow > li");
+            slideShow.isReady = function () { return false; };
+
+            slideShow.begin();
+
+            equals($(lis[0]).css("display"), "list-item", "First element is hidden");
+            equals($(lis[1]).css("display"), "list-item", "2nd element is hidden");
+            equals($(lis[2]).css("display"), "list-item", "3rd element is hidden");
+        });
+
+
+
+        test("begin shows li-1 and hides others", function () {
+            var slideShow = SimpleSlideShow;
+            slideShow.begin();
+
+            var lis = $("ul.slideShow > li");
+
+            equals($(lis[0]).css("display"), "list-item", "First element is list-item");
+            equals($(lis[1]).css("display"), "none", "2nd element is hidden");
+            equals($(lis[2]).css("display"), "none", "3rd element is hidden");
+        });
+
+        test("when isReady equals false switchImage does nothing", function () {
+            var slideShow = SimpleSlideShow;
+            var lis = $("ul.slideShow > li");
+            slideShow.isReady = function () { return false; };
+            var _func;
+            var _timeout;
+            window.setInterval = function (func, timeout) {
+                _func = func;
+                _timeout = timeout;
+            }
+
+            slideShow.switchImage();
+
+            equals(_func, undefined, "_func should be undefined");
+            equals(_timeout, undefined, "_timeout should be undefined");
+        })
+
+
+        test("switchImage fadesOut li-1 and fadesIn li-2 ", function () {
+            restListItems();
+            var slideShow = SimpleSlideShow;
+            var lis = $("ul.slideShow > li");
+            slideShow.setDuration(0);
+
+            slideShow.switchImage();
+
+            equals($(lis[0]).css("display"), "none", "First element is hidden");
+            equals($(lis[1]).css("display"), "list-item", "2nd element is displayed");
+            equals($(lis[2]).css("display"), "list-item", "3rd element is list-item (default)");
+        });
+
+
+        test("calling on consecutive calls correctly fadesOut/fadesIn li's ", function () {
+            var slideShow = SimpleSlideShow;
+            var lis = $("ul.slideShow > li");
+            slideShow.setDuration(0);
+
+            slideShow.switchImage();
+            slideShow.switchImage();
+
+            equals($(lis[0]).css("display"), "none", "First element is hidden");
+            equals($(lis[1]).css("display"), "none", "2nd element is hidden");
+            equals($(lis[2]).css("display"), "list-item", "3rd element is list-item");
+        });
+
+
+        test("calling on switchImage = number of images fadesIn li-1 again fadesOut last li", function () {
+            var slideShow = SimpleSlideShow;
+            var lis = $("ul.slideShow > li");
+            slideShow.setDuration(0);
+
+            slideShow.switchImage();
+            slideShow.switchImage();
+            slideShow.switchImage();
+
+            equals($(lis[0]).css("display"), "list-item", "First element is list-item");
+            equals($(lis[1]).css("display"), "none", "2nd element is hidden");
+            equals($(lis[2]).css("display"), "none", "3rd element is hidden");
+        });
+
+
+
+        test("begin calls switchImage on 5 sec interval", function () {
+            var slideShow = SimpleSlideShow;
+            var _func;
+            var _timeout;
+            window.setInterval = function (func, timeout) {
+                _func = func;
+                _timeout = timeout;
+            }
+
+            slideShow.begin();
+
+            equals(_func.toString(), slideShow.switchImage.toString(), "Switch Image should be passed to setInterval");
+            equals(_timeout, 5000, "setInterval is set to 5000 incriment");
+        });
+
+
+        function restListItems() {
+            $("ul.slideShow > li").each(function (index) {
+                $(this).css("display", "list-item");
+            });
+        }
+    </script>
+
+</head>
+<body>
+<h1 id="qunit-header">Slideshow Test Suite</h1>
+<h2 id="qunit-banner"></h2>
+<div id="qunit-testrunner-toolbar"></div>
+<h2 id="qunit-userAgent"></h2>
+<ol id="qunit-tests"></ol>
+<div id="qunit-fixture">
+        <ul id="mySlideShow" class="slideShow">
+            <li>one</li>
+            <li>two</li>
+            <li>three</li>
+        </ul>
+
+        <div class="slideShow">
+            dummy slide show
+        </div>
+    </div>
+</body>
+</html>
