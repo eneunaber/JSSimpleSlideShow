@@ -1,5 +1,8 @@
 ﻿SimpleSlideShow
 
+Version: 1.0
+jQuery version: 1.4.4
+
 ###################
 About:
 ###################
@@ -13,8 +16,13 @@ How to Use:
 In it's simplest form you will need to include jQuery, slideshow.css, and slideshow.js
 
 In your html you will create a <UL> and give it the class of "slideShow".
+--- Example: <ul class="slideShow">
 
 Then create <LI>'s for each image that you wish to display. 
+--- Example:
+    <li>
+        <img src="../dependencies/images/Three.jpg" />
+    </li>
 
 Then in the Head of your html document add the following code.
 
@@ -43,7 +51,7 @@ begin: Use begin to start your slide show
 
 setDuration: Use setDuration to increase or decrease the speed of the slideshow.
              The duration is kept in ms, so 1000 = 1 sec
---- Example slideShow.setDuration(10000); //10 seconds
+--- Example: slideShow.setDuration(10000); //10 seconds
 
 
 
