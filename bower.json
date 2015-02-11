@@ -1,0 +1,23 @@
+{
+  "name": "JSSimpleSlideShow",
+  "version": "0.0.1",
+  "homepage": "https://github.com/eneunaber/JSSimpleSlideShow",
+  "authors": [
+    "eneunaber@gmail.com"
+  ],
+  "description": "SimpleSlideShow was created to be provide a no-thrills slideshow to your website.",
+  "main": "simpleslideshow/slideshow.js",
+  "keywords": [
+    "JS",
+    "SlideShow"
+  ],
+  "license": "MIT",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
